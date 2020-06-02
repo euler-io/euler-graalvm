@@ -9,12 +9,6 @@
     <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <parent>
-        <groupId>com.github.euler</groupId>
-        <artifactId>euler</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
-    </parent>
-
     <name>Euler - GraalVM Support</name>
     <url>https://github.com/euler-io/euler</url>
 
