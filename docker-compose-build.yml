@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+ euler-graal-build:
+  build:
+   context: .
+   dockerfile: Dockerfile-build
+  working_dir: /src
+  volumes:
+   - .:/src
+   - ~/.m2/repository:/mvn/.m2/repository
+  user: ${CURRENT_UID}:${CURRENT_GID}
+  environment:
+   - LANG=C.UTF-8
+   - LC_ALL=C.UTF-8
+  command: /src/docker-compose/build-entrypoint.sh
