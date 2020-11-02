@@ -30,12 +30,29 @@ public abstract class GraalEvaluator implements AutoCloseable {
 
     protected ProcessingContext process(Context ctx, Item item) {
         Value evaluated = eval(ctx);
-        if (evaluated.canExecute()) {
-            Value executed = evaluated.execute(item.parentURI.toString(), item.itemURI.toString(), new ProcessingContextProxy(item.ctx));
+        if (evaluated.canInstantiate()) {
+            Value newInstance = newInstance(evaluated);
+            Value processMethod = getProcessMethod(newInstance);
+            Value executed = executeProcess(item, processMethod);
+            return toProcessingContext(executed);
+        } else if (evaluated.canExecute()) {
+            Value executed = executeProcess(item, evaluated);
             return toProcessingContext(executed);
         } else {
             return toProcessingContext(evaluated);
         }
+    }
+
+    protected Value executeProcess(Item item, Value processMethod) {
+        return processMethod.execute(item.parentURI.toString(), item.itemURI.toString(), new ProcessingContextProxy(item.ctx));
+    }
+
+    protected Value getProcessMethod(Value newInstance) {
+        return newInstance.getMember("process");
+    }
+
+    protected Value newInstance(Value evaluated) {
+        return evaluated.newInstance();
     }
 
     protected Value eval(Context ctx) {
