@@ -51,7 +51,10 @@ public abstract class GraalEvaluator implements AutoCloseable {
     }
 
     protected Context createContext(Engine engine, Item item) {
-        Context context = Context.newBuilder().allowAllAccess(true).engine(engine).build();
+        Context context = Context.newBuilder()
+                .allowAllAccess(true)
+                .engine(engine)
+                .build();
         Value bindings = context.getBindings(getLanguage());
         setBindings(bindings, item);
         return context;

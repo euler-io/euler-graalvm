@@ -1,6 +1,5 @@
 package com.github.euler.graal;
 
-import java.util.List;
 import java.util.Map;
 
 import org.graalvm.polyglot.Context;
@@ -33,22 +32,16 @@ public class PythonEvaluator extends GraalEvaluator {
         bindings.putMember("context", new ProcessingContextProxy(item.ctx));
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected ProcessingContext toProcessingContext(Value result) {
         Builder builder = ProcessingContext.builder();
-        Value get = result.getMember("get");
-        Value metadata = get.execute("metadata");
-        if (metadata != null) {
-            System.out.println(metadata.getMember("keys").execute());
-            metadata.getMember("keys").execute().as(List.class).forEach(k -> {
-                
-            });
-            metadata.as(Map.class).forEach((k, v) -> {
-                System.out.println(k.toString());
-                builder.metadata(k.toString(), v);
-            });
-        }
+
+        Map<Object, Object> metadata = result.getMember("metadata").asHostObject();
+        metadata.forEach((k, v) -> builder.metadata(k.toString(), v));
+
+        Map<Object, Object> context = result.getMember("context").asHostObject();
+        context.forEach((k, v) -> builder.context(k.toString(), v));
+
         return builder.build();
     }
 
