@@ -88,3 +88,23 @@ class RawIOBaseWrapper(io.RawIOBase):
 
     def write(self, b):
         self.wrapped.write(b)
+
+
+class StreamFactoryWrapper(object):
+
+    def __init__(self, wrapped):
+        self.wrapped = wrapped
+
+    def open_input(self, uri, ctx):
+        return RawIOBaseWrapper(self.wrapped.open_input(uri, ctx))
+
+    def open_text_input(self, uri, ctx, buffer_size=io.DEFAULT_BUFFER_SIZE, encoding=None, errors=None, newline=None, line_buffering=False, write_through=False):
+        raw_in = self.open_input(uri, ctx)
+        return io.TextIOWrapper(io.BufferedReader(raw_in, buffer_size), encoding, errors, newline, line_buffering, write_through)
+
+    def open_output(self, uri, ctx):
+        return RawIOBaseWrapper(self.wrapped.open_output(uri, ctx))
+    
+    def open_text_output(self, uri, ctx, buffer_size=io.DEFAULT_BUFFER_SIZE, encoding=None, errors=None, newline=None, line_buffering=False, write_through=False):
+        raw_out = self.open_output(uri, ctx)
+        return io.TextIOWrapper(io.BufferedWriter(raw_out, buffer_size), encoding, errors, newline, line_buffering, write_through)

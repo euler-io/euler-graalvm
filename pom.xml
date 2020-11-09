@@ -48,6 +48,11 @@
         </dependency>
         <dependency>
             <groupId>com.github.euler-io</groupId>
+            <artifactId>euler-common</artifactId>
+            <version>${euler.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.euler-io</groupId>
             <artifactId>euler-core</artifactId>
             <version>${euler.version}</version>
         </dependency>
@@ -55,6 +60,7 @@
             <groupId>com.github.euler-io</groupId>
             <artifactId>euler-config</artifactId>
             <version>${euler.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
