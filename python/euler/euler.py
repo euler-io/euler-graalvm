@@ -28,7 +28,7 @@ class ProcessingContextBuilder(object):
         return self.context.put(key, value)
 
 
-class RawIOBaseWrapper(io.RawIOBase):
+class RawIOBaseWrapper(object):
 
     def __init__(self, wrapped):
         self.wrapped = wrapped

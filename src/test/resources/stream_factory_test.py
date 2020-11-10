@@ -5,4 +5,6 @@ def test(stream_factory, uri, ctx):
 	with stream_factory.open_text_input(uri, ctx) as input:
 		return input.read()
 
+	print('read')
+
 test
