@@ -21,7 +21,6 @@ public class OutputStreamRawIOBaseProxy extends AbstractRawIOBaseProxy {
     @Override
     public void close() throws IOException {
         setClosed(true);
-        this.writer.flush();
         this.writer.close();
         this.out.close();
     }

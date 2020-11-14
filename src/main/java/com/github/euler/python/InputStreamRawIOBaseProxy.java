@@ -27,7 +27,7 @@ public class InputStreamRawIOBaseProxy extends AbstractRawIOBaseProxy {
 
     @Override
     public void flush() {
-        throw new RuntimeException(InputStreamRawIOBaseProxy.class.getName() + " cant be flushed.");
+        // Nothing to do.
     }
 
     @Override

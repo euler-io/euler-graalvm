@@ -78,16 +78,22 @@ class RawIOBaseWrapper(object):
         self.wrapped.__del__()
 
     def read(self, size=-1):
-        return self.wrapped.read(size)
+        return bytes(self.wrapped.read(size))
 
     def readall(self):
-        return self.wrapped.readall()
+        return bytes(self.wrapped.readall())
 
     def readinto(self, b):
         self.wrapped.readinto(b)
 
     def write(self, b):
         self.wrapped.write(b)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return self.close()
 
 
 class StreamFactoryWrapper(object):
@@ -98,13 +104,13 @@ class StreamFactoryWrapper(object):
     def open_input(self, uri, ctx):
         return RawIOBaseWrapper(self.wrapped.open_input(uri, ctx))
 
-    def open_text_input(self, uri, ctx, buffer_size=io.DEFAULT_BUFFER_SIZE, encoding=None, errors=None, newline=None, line_buffering=False, write_through=False):
+    def open_text_input(self, uri, ctx, encoding=None, errors=None, newline=None, line_buffering=False, write_through=False):
         raw_in = self.open_input(uri, ctx)
-        return io.TextIOWrapper(io.BufferedReader(raw_in, buffer_size), encoding, errors, newline, line_buffering, write_through)
+        return io.TextIOWrapper(raw_in, encoding, errors, newline, line_buffering, write_through)
 
     def open_output(self, uri, ctx):
         return RawIOBaseWrapper(self.wrapped.open_output(uri, ctx))
-    
-    def open_text_output(self, uri, ctx, buffer_size=io.DEFAULT_BUFFER_SIZE, encoding=None, errors=None, newline=None, line_buffering=False, write_through=False):
+
+    def open_text_output(self, uri, ctx, encoding=None, errors=None, newline=None, line_buffering=False, write_through=False):
         raw_out = self.open_output(uri, ctx)
-        return io.TextIOWrapper(io.BufferedWriter(raw_out, buffer_size), encoding, errors, newline, line_buffering, write_through)
+        return io.TextIOWrapper(raw_out, encoding, errors, newline, line_buffering, write_through)
