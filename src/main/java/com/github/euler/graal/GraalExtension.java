@@ -11,20 +11,17 @@ public class GraalExtension implements EulerExtension {
 
     @Override
     public List<ContextConfigConverter> pathConverters() {
-        // TODO Auto-generated method stub
-        return EulerExtension.super.pathConverters();
+        return List.of(new GraalContextConfigConverter());
     }
 
     @Override
     public List<TaskConfigConverter> taskConverters() {
-        // TODO Auto-generated method stub
-        return EulerExtension.super.taskConverters();
+        return List.of(new GraalScriptTaskConfigConverter());
     }
 
     @Override
     public List<TypeConfigConverter<?>> typeConverters() {
-        // TODO Auto-generated method stub
-        return EulerExtension.super.typeConverters();
+        return List.of(new GraalContextInContextConfigConverter(), new GraalContextTypeContextConfigConverter());
     }
 
     @Override
