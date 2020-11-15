@@ -1,9 +1,13 @@
 package com.github.euler.graal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Value;
 
+import com.github.euler.common.StreamFactory;
 import com.github.euler.core.Item;
 import com.github.euler.core.ProcessingContext;
 
@@ -11,15 +15,15 @@ public abstract class GraalEvaluator implements AutoCloseable {
 
     private final Engine engine;
     private final String code;
+    private final StreamFactory sf;
+    private List<String> defaultStatements;
 
-    public GraalEvaluator(String code) {
-        this(Engine.create(), code);
-    }
-
-    public GraalEvaluator(Engine engine, String code) {
+    public GraalEvaluator(Engine engine, String code, StreamFactory sf, List<String> defaultStatements) {
         super();
         this.engine = engine;
         this.code = code;
+        this.sf = sf;
+        this.defaultStatements = new ArrayList<>(defaultStatements);
     }
 
     public final ProcessingContext process(Item item) {
@@ -33,19 +37,24 @@ public abstract class GraalEvaluator implements AutoCloseable {
         if (evaluated.canInstantiate()) {
             Value newInstance = newInstance(evaluated);
             Value processMethod = getProcessMethod(newInstance);
-            Value executed = executeProcess(item, processMethod);
+            Value executed = executeProcess(ctx, item, processMethod);
             return toProcessingContext(executed);
         } else if (evaluated.canExecute()) {
-            Value executed = executeProcess(item, evaluated);
+            Value executed = executeProcess(ctx, item, evaluated);
             return toProcessingContext(executed);
         } else {
+            Value bindings = ctx.getBindings(getLanguage());
+            setBindings(ctx, bindings, item);
             return toProcessingContext(evaluated);
         }
     }
 
-    protected Value executeProcess(Item item, Value processMethod) {
-        return processMethod.execute(item.parentURI.toString(), item.itemURI.toString(), new ProcessingContextProxy(item.ctx));
+    protected Value executeProcess(Context ctx, Item item, Value processMethod) {
+        Object[] arguments = buildArguments(ctx, item);
+        return processMethod.execute(arguments);
     }
+
+    protected abstract Object[] buildArguments(Context ctx, Item item);
 
     protected Value getProcessMethod(Value newInstance) {
         return newInstance.getMember("process");
@@ -72,14 +81,13 @@ public abstract class GraalEvaluator implements AutoCloseable {
                 .allowAllAccess(true)
                 .engine(engine)
                 .build();
-        Value bindings = context.getBindings(getLanguage());
-        setBindings(bindings, item);
+        this.defaultStatements.forEach(stmt -> context.eval(getLanguage(), stmt));
         return context;
     }
 
     protected abstract ProcessingContext toProcessingContext(Value result);
 
-    protected abstract void setBindings(Value bindings, Item item);
+    protected abstract void setBindings(Context context, Value bindings, Item item);
 
     protected abstract String getLanguage();
 
@@ -88,6 +96,22 @@ public abstract class GraalEvaluator implements AutoCloseable {
         if (engine != null) {
             engine.close(true);
         }
+    }
+
+    protected StreamFactory getStreamFactory() {
+        return sf;
+    }
+
+    public void addDefaultStatement(String stmt) {
+        this.defaultStatements.add(stmt);
+    }
+
+    public List<String> getDefaultStatements() {
+        return defaultStatements;
+    }
+
+    public void setDefaultStatements(List<String> defaultStatements) {
+        this.defaultStatements = new ArrayList<>(defaultStatements);
     }
 
 }

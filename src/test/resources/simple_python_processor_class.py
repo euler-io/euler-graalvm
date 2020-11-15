@@ -2,7 +2,7 @@ import euler
 
 class PythonSimpleProcessor(object):
 
-	def process(self, parent_uri, item_uri, ctx):
+	def process(self, parent_uri, item_uri, ctx, stream_factory):
 		value = ctx.metadata.value
 		return euler.ProcessingContextBuilder(
 			metadata = {

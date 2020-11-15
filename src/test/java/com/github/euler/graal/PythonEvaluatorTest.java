@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.github.euler.core.Item;
 import com.github.euler.core.ProcessingContext;
+import com.github.euler.file.FileStreamFactory;
 
 public class PythonEvaluatorTest {
 
@@ -29,6 +30,22 @@ public class PythonEvaluatorTest {
             ctx = ev.process(item);
             assertEquals(4, ctx.metadata("value"));
             assertEquals(4, ctx.context("value"));
+        }
+    }
+
+    @Test
+    public void testProcessFunctionWithStreamFactory() throws Exception {
+        URI uri = StreamFactoryProxyTest.class.getResource("/test_file.txt").toURI();
+        Engine engine = Engine.newBuilder()
+                .option("python.PythonPath", System.getenv("PYTHONPATH"))
+                .build();
+
+        String code = IOUtils.toString(PythonEvaluatorTest.class.getResourceAsStream("/simple_python_processor_with_stream_factory.py"), "utf-8");
+        try (PythonEvaluator ev = new PythonEvaluator(engine, code, new FileStreamFactory())) {
+            ProcessingContext ctx = ProcessingContext.EMPTY;
+            Item item = new Item(uri, uri, ctx);
+            ctx = ev.process(item);
+            assertEquals("Some content", ctx.metadata("content"));
         }
     }
 
