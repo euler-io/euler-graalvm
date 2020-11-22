@@ -19,6 +19,7 @@
         <java.version>11</java.version>
         <graal.version>20.2.0</graal.version>
         <euler.version>0.5.1</euler.version>
+        <euler.scope>compile</euler.scope>
         <akka.version>2.6.5</akka.version>
         <maven.test.skip.exec>true</maven.test.skip.exec>
     </properties>
@@ -50,11 +51,13 @@
             <groupId>com.github.euler-io</groupId>
             <artifactId>euler-common</artifactId>
             <version>${euler.version}</version>
+            <scope>${euler.scope}</scope>
         </dependency>
         <dependency>
             <groupId>com.github.euler-io</groupId>
             <artifactId>euler-core</artifactId>
             <version>${euler.version}</version>
+            <scope>${euler.scope}</scope>
         </dependency>
         <dependency>
             <groupId>com.github.euler-io</groupId>
