@@ -20,7 +20,6 @@ import com.github.euler.configuration.TasksConfigConverter;
 import com.github.euler.configuration.TypesConfigConverter;
 import com.github.euler.core.ItemProcessorTask;
 import com.github.euler.core.Task;
-import com.github.euler.file.BasicFilePropertiesTaskConfigConverter;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
@@ -73,7 +72,7 @@ public class GraalScriptTaskConfigConverter extends AbstractTaskConfigConverter 
     }
 
     protected Config getDefaultConfig(String language) {
-        URL resource = BasicFilePropertiesTaskConfigConverter.class.getClassLoader().getResource("graalscripttask-" + language + ".conf");
+        URL resource = GraalScriptTaskConfigConverter.class.getClassLoader().getResource("graalscripttask-" + language + ".conf");
         return ConfigFactory.parseURL(resource);
     }
 

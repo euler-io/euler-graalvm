@@ -13,7 +13,6 @@ import com.github.euler.common.StreamFactory;
 import com.github.euler.core.Item;
 import com.github.euler.core.ProcessingContext;
 import com.github.euler.core.ProcessingContext.Builder;
-import com.github.euler.file.FileStreamFactory;
 import com.github.euler.python.StreamFactoryProxy;
 
 public class PythonEvaluator extends GraalEvaluator {
@@ -54,7 +53,7 @@ public class PythonEvaluator extends GraalEvaluator {
     }
 
     private Value createStreamFactoryProxy(Context context) {
-        StreamFactoryProxy streamFactoryProxy = new StreamFactoryProxy(new FileStreamFactory(), Charset.forName("utf-8"));
+        StreamFactoryProxy streamFactoryProxy = new StreamFactoryProxy(getStreamFactory(), Charset.forName("utf-8"));
         return context.eval(getLanguage(), "euler.StreamFactoryWrapper").newInstance(streamFactoryProxy);
     }
 
