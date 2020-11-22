@@ -21,7 +21,7 @@
         <euler.version>0.5.1</euler.version>
         <euler.scope>compile</euler.scope>
         <akka.version>2.6.5</akka.version>
-        <maven.test.skip.exec>true</maven.test.skip.exec>
+        <maven.test.skip>true</maven.test.skip>
     </properties>
 
     <scm>
@@ -127,7 +127,7 @@
         <profile>
             <id>graalvm</id>
             <properties>
-                <maven.test.skip.exec>false</maven.test.skip.exec>
+                <maven.test.skip>false</maven.test.skip>
             </properties>
         </profile>
     </profiles>
