@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-if [[ ${SOURCE_BRANCH} == 'master' || ${SOURCE_BRANCH} == 'dev' ]]; then
+if [[ ${DOCKER_TAG} == 'latest' || ${DOCKER_TAG} == 'dev' ]]; then
 	depVersion=$(curl -s https://repo1.maven.org/maven2/com/github/euler-io/opendistro-impl/maven-metadata.xml | grep '<latest>' | sed "s/.*<latest>\([^<]*\)<\/latest>.*/\1/")
 else
-	depVersion=$SOURCE_BRANCH
+	depVersion=$DOCKER_TAG
 fi
 echo "Using: ${depVersion}"
 

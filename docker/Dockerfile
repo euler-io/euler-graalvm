@@ -1,5 +1,6 @@
 FROM openjdk:14-jdk-buster as builder
 
+ARG DOCKER_TAG=latest
 ARG SOURCE_BRANCH=master
 ARG COMPILE_OPTS=-Dmaven.test.skip
 ARG MAVEN_VERSION=3.6.3
