@@ -27,13 +27,6 @@
         </developer>
     </developers>
 
-    <scm>
-        <url>https://github.com/euler-io/euler-graalvm</url>
-        <connection>scm:git:ssh://git@github.com/euler-io/euler-graalvm.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/euler-io/euler-graalvm.git</developerConnection>
-        <tag>0.5.2</tag>
-    </scm>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <downloadSources>true</downloadSources>
@@ -47,6 +40,7 @@
     </properties>
 
     <scm>
+        <url>https://github.com/euler-io/euler-graalvm</url>
         <connection>scm:git:https://github.com/euler-io/euler-graalvm.git</connection>
         <developerConnection>scm:git:https://github.com/euler-io/euler-graalvm.git</developerConnection>
         <tag>HEAD</tag>
