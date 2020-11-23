@@ -8,9 +8,31 @@
     <artifactId>euler-graal</artifactId>
     <version>0.5.2-SNAPSHOT</version>
     <packaging>jar</packaging>
-
     <name>Euler - GraalVM Support</name>
-    <url>https://github.com/euler-io/euler</url>
+    <url>https://github.com/euler-io/euler-graalvm</url>
+    <description>Euler - GraalVM Support.</description>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>filipesimoes</id>
+            <name>Filipe Simoes</name>
+            <email>835586+filipesimoes@users.noreply.github.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/euler-io/euler-graalvm</url>
+        <connection>scm:git:ssh://git@github.com/euler-io/euler-graalvm.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/euler-io/euler-graalvm.git</developerConnection>
+        <tag>0.5.2</tag>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
