@@ -42,7 +42,7 @@ RUN mkdir -p /app/lib \
 	&& mkdir -p /opt/graalvm-ce-java11-20.2.0/languages/python/lib-graalpython/euler
 COPY --from=builder /app/opendistro-http-api.jar /app/
 COPY --from=builder /app/dependencies/ /app/lib/
-COPY --from=builder /src/python/euler/euler.py /opt/graalvm-ce-java11-20.2.0/languages/python/lib-graalpython/euler
+COPY --from=builder /src/python/euler/ /opt/graalvm-ce-java11-20.2.0/languages/python/lib-graalpython/euler
 
 # Adding app group and user
 RUN groupadd --gid 1100 euler \
