@@ -6,7 +6,7 @@
 
     <groupId>com.github.euler-io</groupId>
     <artifactId>euler-graal</artifactId>
-    <version>0.5.3-SNAPSHOT</version>
+    <version>0.5.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Euler - GraalVM Support</name>
     <url>https://github.com/euler-io/euler-graalvm</url>
