@@ -26,9 +26,16 @@ RUN mkdir /src \
 	&& git clone --branch $SOURCE_BRANCH --depth 1 https://github.com/euler-io/euler-graalvm.git /src \
 	&& mvn clean package $COMPILE_OPTS
 
-# Downloading app
+# Compiling euler-api branch
+RUN mkdir /src-api \
+	&& cd /src-api \
+	&& git clone --branch $SOURCE_BRANCH --depth 1 https://github.com/euler-io/euler-api.git /src-api \
+	&& mvn clean package $COMPILE_OPTS
+
+# Downloading dependencies
 COPY /docker/download-dependencies.sh .
-RUN ./download-dependencies.sh /app
+RUN mkdir /dependencies \
+	&& mvn dependency:copy-dependencies -Deuler.scope=provided -DoutputDirectory=/dependencies -f /src/pom.xml
 
 FROM oracle/graalvm-ce:20.2.0-java11
 
@@ -40,8 +47,8 @@ RUN gu install python
 # Installing app
 RUN mkdir -p /app/lib \
 	&& mkdir -p /opt/graalvm-ce-java11-20.2.0/languages/python/lib-graalpython/euler
-COPY --from=builder /app/opendistro-http-api.jar /app/
-COPY --from=builder /app/dependencies/ /app/lib/
+COPY --from=builder /src-api/opendistro-impl/target/opendistro-http-api.jar /app/
+COPY --from=builder /dependencies/ /app/lib/
 COPY --from=builder /src/python/euler/ /opt/graalvm-ce-java11-20.2.0/languages/python/lib-graalpython/euler
 
 # Adding app group and user
