@@ -33,9 +33,8 @@ RUN mkdir /src-api \
 	&& mvn clean package $COMPILE_OPTS
 
 # Downloading dependencies
-COPY /docker/download-dependencies.sh .
 RUN mkdir /dependencies \
-	&& mvn dependency:copy-dependencies -Deuler.scope=provided -DoutputDirectory=/dependencies -f /src/pom.xml
+	&& mvn dependency:copy-dependencies -Deuler.scope=provided -DincludeScope=runtime -DoutputDirectory=/dependencies -f /src/pom.xml
 
 FROM oracle/graalvm-ce:20.2.0-java11
 
