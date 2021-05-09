@@ -1,10 +1,7 @@
 FROM openjdk:14-jdk-buster as builder
 
-ARG DOCKER_TAG=latest
-ARG SOURCE_BRANCH=master
-ARG COMPILE_OPTS=-Dmaven.test.skip
-ARG MAVEN_VERSION=3.6.3
-ARG MAVEN_SHA=c35a1803a6e70a126e80b2b3ae33eed961f83ed74d18fcd16909b2d44d7dada3203f1ffe726c17ef8dcca2dcaa9fca676987befeadc9b9f759967a8cb77181c0
+ARG MAVEN_VERSION=3.8.1
+ARG MAVEN_SHA=0ec48eb515d93f8515d4abe465570dfded6fa13a3ceb9aab8031428442d9912ec20f066b2afbf56964ffe1ceb56f80321b50db73cf77a0e2445ad0211fb8e38d
 ARG MAVEN_BASE_URL=https://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries
 
 # Install maven
@@ -20,25 +17,34 @@ RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		git
 
+ARG DOCKER_TAG=latest
+ARG REPO_URL=https://github.com/euler-io/euler-graalvm.git
+ARG SOURCE_BRANCH=master
+ARG CLONE_ARGS="--depth 1"
+ARG COMPILE_OPTS="-Dmaven.test.skip -DdownloadSources=false -DdownloadJavadocs=false"
+
 # Compiling branch
 RUN mkdir /src \
 	&& cd /src \
-	&& git clone --branch $SOURCE_BRANCH --depth 1 https://github.com/euler-io/euler-graalvm.git /src \
-	&& mvn clean package $COMPILE_OPTS
+	&& git clone --branch $SOURCE_BRANCH $CLONE_ARGS $REPO_URL /src \
+	&& mvn package $COMPILE_OPTS
+
+ARG REPO_API_URL=https://github.com/euler-io/euler-graalvm.git
 
 # Compiling euler-api branch
 RUN mkdir /src-api \
 	&& cd /src-api \
-	&& git clone --branch $SOURCE_BRANCH --depth 1 https://github.com/euler-io/euler-api.git /src-api \
-	&& mvn clean package $COMPILE_OPTS
+	&& git clone --branch $SOURCE_BRANCH $CLONE_ARGS $REPO_API_URL /src-api \
+	&& mvn package $COMPILE_OPTS
 
 # Downloading dependencies
 RUN mkdir /dependencies \
-	&& mvn dependency:copy-dependencies -Deuler.scope=provided -DincludeScope=runtime -DoutputDirectory=/dependencies -f /src/pom.xml
+	&& mvn dependency:copy-dependencies -DdownloadSources=false -DdownloadJavadocs=false -Deuler.scope=provided -DincludeScope=runtime -DoutputDirectory=/dependencies -f /src/pom.xml
 
 FROM oracle/graalvm-ce:20.2.0-java11
 
 ENV JAVA_OPTS=""
+ENV APP_ARGS=""
 
 #Install python language
 RUN gu install python
@@ -58,4 +64,4 @@ RUN groupadd --gid 1100 euler \
 USER euler
 WORKDIR /app
 
-CMD java -Dloader.path=/app/lib ${JAVA_OPTS} -jar /app/opendistro-http-api.jar
+CMD java -Dloader.path=/app/lib ${JAVA_OPTS} -jar /app/opendistro-http-api.jar ${APP_ARGS}
