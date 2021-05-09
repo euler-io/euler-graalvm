@@ -29,7 +29,7 @@ RUN mkdir /src \
 	&& git clone --branch $SOURCE_BRANCH $CLONE_ARGS $REPO_URL /src \
 	&& mvn package $COMPILE_OPTS
 
-ARG REPO_API_URL=https://github.com/euler-io/euler-graalvm.git
+ARG REPO_API_URL=https://github.com/euler-io/euler-api.git
 
 # Compiling euler-api branch
 RUN mkdir /src-api \
