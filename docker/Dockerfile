@@ -41,7 +41,7 @@ RUN mkdir /src-api \
 RUN mkdir /dependencies \
 	&& mvn dependency:copy-dependencies -DdownloadSources=false -DdownloadJavadocs=false -Deuler.scope=provided -DincludeScope=runtime -DoutputDirectory=/dependencies -f /src/pom.xml
 
-FROM oracle/graalvm-ce:20.2.0-java11
+FROM ghcr.io/graalvm/graalvm-ce:java11-21.1.0
 
 ENV JAVA_OPTS=""
 ENV APP_ARGS=""
@@ -51,10 +51,10 @@ RUN gu install python
 
 # Installing app
 RUN mkdir -p /app/lib \
-	&& mkdir -p /opt/graalvm-ce-java11-20.2.0/languages/python/lib-graalpython/euler
+	&& mkdir -p /opt/graalvm-ce-java11-21.1.0/languages/python/lib-graalpython/euler
 COPY --from=builder /src-api/opendistro-impl/target/opendistro-http-api.jar /app/
 COPY --from=builder /dependencies/ /app/lib/
-COPY --from=builder /src/python/euler/ /opt/graalvm-ce-java11-20.2.0/languages/python/lib-graalpython/euler
+COPY --from=builder /src/python/euler/ /opt/graalvm-ce-java11-21.1.0/languages/python/lib-graalpython/euler
 
 # Adding app group and user
 RUN groupadd --gid 1100 euler \
