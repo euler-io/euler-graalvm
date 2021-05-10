@@ -30,8 +30,8 @@
         <downloadSources>true</downloadSources>
         <downloadJavadocs>true</downloadJavadocs>
         <java.version>11</java.version>
-        <graal.version>20.2.0</graal.version>
-        <euler.version>0.5.2</euler.version>
+        <graal.version>21.1.0</graal.version>
+        <euler.version>0.6.1</euler.version>
         <euler.scope>compile</euler.scope>
         <akka.version>2.6.5</akka.version>
         <maven.test.skip>true</maven.test.skip>
